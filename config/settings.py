@@ -42,7 +42,15 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
 ]
 
-CUSTOM_APPS = []
+CUSTOM_APPS = [
+    "announces.apps.AnnouncesConfig",
+    "common.apps.CommonConfig",
+    "categories.apps.CategoriesConfig",
+    "inquiries.apps.InquiriesConfig",
+    "petitions.apps.PetitionsConfig",
+    "surveys.apps.SurveysConfig",
+    "users.apps.UsersConfig",
+]
 
 SYSTEM_APPS = [
     "django.contrib.admin",
@@ -123,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "ko-kr"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Seoul"
 
 USE_I18N = True
 
@@ -139,3 +147,14 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "users.User"
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+        "config.authentication.JWTAuthentication",
+    ]
+}

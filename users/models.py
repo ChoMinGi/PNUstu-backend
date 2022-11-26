@@ -5,12 +5,8 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     class MajorChoices(models.TextChoices):
         # NAME = (value, label)
-        ASE = ("aerospaceE", "AerospaceE")
-        CSE = ("computerscienceE", "ComputerscienceE")
-
-    class LanguageChoices(models.TextChoices):
-        KR = ("kr", "Korean")
-        EN = ("en", "English")
+        ASE = ("aerospaceE", "항공우주공학과")
+        CSE = ("computerscienceE", "컴퓨터공학과")
 
     first_name = models.CharField(
         max_length=150,
