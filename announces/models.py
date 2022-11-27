@@ -29,6 +29,11 @@ class Announce(CommonModel):
         related_name="announces",
     )
 
+    kind = models.CharField(
+        max_length=20,
+        choices=TopicKindChoices.choices,
+    )
+
     is_important = models.BooleanField(
         default=False,
     )

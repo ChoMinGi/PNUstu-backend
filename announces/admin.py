@@ -4,58 +4,36 @@ from .models import Announce
 
 @admin.action(description="Set all prices to zero")
 # 3개의 변수를 받는다 (이 액션을 가지는 모델 관리자, 액션 요청하는 user 정보, 직접 선택한 요소)
-def reset_prices(model_admin, request, rooms):
-    for room in rooms.all():
-        room.price = 0
-        room.save()
-
-    print(dir(request.user))
-
-    pass
+def delete_all_announces(model_admin, request, announces):
+    for announce in announces.all():
+        announce.price = 0
+        announce.save()
 
 
-@admin.register(Room)
-class RoomAdmin(admin.ModelAdmin):
+@admin.register(Announce)
+class AnnounceAdmin(admin.ModelAdmin):
 
     # Always import actions in the ADMIN
-    actions = (reset_prices,)
+    actions = (delete_all_announces,)
 
     list_display = (
-        "name",
-        "price",
+        "title",
+        "content",
+        "category",
+        "is_important",
+        "writer",
         "kind",
-        "total_amenities",
-        "rating",
-        "owner",
         "created_at",
     )
     search_fields = (
         #
-        "owner__username",
+        "writer__username",
     )
     list_filter = (
-        "country",
-        "city",
-        "price",
-        "rooms",
-        "toilets",
-        "pet_friendly",
+        "category",
+        "is_important",
+        "writer",
         "kind",
-        "amenities",
-        "created_at",
-        "updated_at",
-    )
-
-
-@admin.register(Amenity)
-class AmenityAdmin(admin.ModelAdmin):
-    list_display = (
-        "name",
-        "description",
-        "created_at",
-        "updated_at",
-    )
-    readonly_fields = (
         "created_at",
         "updated_at",
     )

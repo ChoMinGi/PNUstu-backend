@@ -20,8 +20,7 @@ class AnnounceListSerializer(ModelSerializer):
             "pk",
             "title",
             "is_writer",
-            "pk",
-            "pk",
+            "is_important",
         )
 
     def get_is_writer(self, announce):
@@ -35,7 +34,6 @@ class AnnounceDetailSerializer(ModelSerializer):
     category = CategorySerializer(
         read_only=True,
     )
-    rating = serializers.SerializerMethodField()
     is_writer = serializers.SerializerMethodField()
     photos = PhotoSerializer(
         many=True,
