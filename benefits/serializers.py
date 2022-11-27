@@ -8,7 +8,6 @@ from medias.serializers import PhotoSerializer
 
 class BenefitListSerializer(ModelSerializer):
 
-    is_writer = serializers.SerializerMethodField()
     photos = PhotoSerializer(
         many=True,
         read_only=True,
@@ -16,16 +15,20 @@ class BenefitListSerializer(ModelSerializer):
 
     class Meta:
         model = Benefit
-        field = (
+        fields = (
             "pk",
             "title",
+            "photos",
+            "writer",
             "is_writer",
+            "writer",
+            "is_important",
         )
 
-    def get_is_writer(self, announce):
+    def get_is_writer(self, benefit):
         # dynamic field 동적필드
         request = self.context["request"]
-        return announce.owner == request.user
+        return benefit.writer == request.user
 
 
 class BenefitDetailSerializer(ModelSerializer):
@@ -43,7 +46,7 @@ class BenefitDetailSerializer(ModelSerializer):
         model = Benefit
         fields = "__all__"
 
-    def get_is_writer(self, room):
+    def get_is_writer(self, benefit):
         # dynamic field 동적필드
         request = self.context["request"]
-        return room.owner == request.user
+        return benefit.writer == request.user
