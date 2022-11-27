@@ -32,6 +32,8 @@ class Announce(CommonModel):
     kind = models.CharField(
         max_length=20,
         choices=TopicKindChoices.choices,
+        null=True,
+        blank=True,
     )
 
     is_important = models.BooleanField(
@@ -39,4 +41,4 @@ class Announce(CommonModel):
     )
 
     def __str__(self) -> str:
-        return self.name
+        return self.title
