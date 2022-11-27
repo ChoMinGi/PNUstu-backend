@@ -6,8 +6,7 @@ from .models import Benefit
 # 3개의 변수를 받는다 (이 액션을 가지는 모델 관리자, 액션 요청하는 user 정보, 직접 선택한 요소)
 def delete_all_benefits(model_admin, request, benefits):
     for benefit in benefits.all():
-        benefit.price = 0
-        benefit.save()
+        benefit.delete()
 
 
 @admin.register(Benefit)

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
+from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
 from rest_framework.exceptions import (
     NotAuthenticated,
     NotFound,
@@ -14,7 +15,7 @@ from rest_framework.views import APIView
 
 from categories.models import Category
 from .models import Announce
-from .serializers import AnnounceListSerializer
+from .serializers import AnnounceListSerializer, AnnounceDetailSerializer
 from medias.serializers import PhotoSerializer
 
 
@@ -31,3 +32,35 @@ class Announces(APIView):
             context={"request": request},
         )
         return Response(serializer.data)
+
+
+class AnnounceDetail(APIView):
+
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_object(self, pk):
+        try:
+            return Announce.objects.get(pk=pk)
+        except Announce.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk):
+        announce = self.get_object(pk)
+        serializer = serializers.AnnounceDetailSerializer(
+            announce,
+            context={"request": request},
+        )
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        announce = self.get_object(pk)
+        if announce.owner != request.user:
+            raise PermissionDenied
+        # your magic
+
+    def delete(self, request, pk):
+        announce = self.get_object(pk)
+        if announce.owner != request.user:
+            raise PermissionDenied
+        announce.delete()
+        return Response(status=HTTP_204_NO_CONTENT)
