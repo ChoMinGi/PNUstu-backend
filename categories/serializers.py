@@ -7,6 +7,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         # 수동으로 추가하기 fields = ("name","kind",)
         fields = (
+            "pk",
             "name",
             "kind",
         )

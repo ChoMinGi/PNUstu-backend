@@ -6,7 +6,7 @@ from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("anounces/", include("announces.urls")),
+    path("announces/", include("announces.urls")),
     path("categories/", include("categories.urls")),
     path("medias/", include("medias.urls")),
     path("users/", include("users.urls")),

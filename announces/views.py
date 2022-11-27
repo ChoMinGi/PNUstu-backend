@@ -57,7 +57,7 @@ class Announces(APIView):
                     )
                     return Response(serializer.data)
             except Exception as e:
-                raise ParseError("Amenity not found")
+                raise ParseError("Announce not found")
         else:
             return Response(
                 serializer.errors,
