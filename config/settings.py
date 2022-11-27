@@ -44,9 +44,11 @@ THIRD_PARTY_APPS = [
 
 CUSTOM_APPS = [
     "announces.apps.AnnouncesConfig",
-    "common.apps.CommonConfig",
+    "benefits.apps.BenefitsConfig",
     "categories.apps.CategoriesConfig",
+    "common.apps.CommonConfig",
     "inquiries.apps.InquiriesConfig",
+    "medias.apps.MediasConfig",
     "petitions.apps.PetitionsConfig",
     "surveys.apps.SurveysConfig",
     "users.apps.UsersConfig",
@@ -149,6 +151,10 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
+
+MEDIA_ROOT = "uploads"
+
+MEDIA_URL = "user-uploads/"
 
 
 REST_FRAMEWORK = {
