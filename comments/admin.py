@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Review
+from .models import Comment
 
 
 class QuestionFilter(admin.SimpleListFilter):
@@ -21,7 +21,7 @@ class QuestionFilter(admin.SimpleListFilter):
             comments
 
 
-@admin.register(Review)
+@admin.register(Comment)
 class ReviewAdmin(admin.ModelAdmin):
 
     list_display = (
@@ -30,8 +30,4 @@ class ReviewAdmin(admin.ModelAdmin):
     )
     list_filter = (
         QuestionFilter,
-        "rating",
-        "user__is_host",
-        "room__category",
-        "room__pet_friendly",
     )

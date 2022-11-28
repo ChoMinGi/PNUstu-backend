@@ -24,7 +24,7 @@ class Benefits(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
-        all_benefits = Benefit.objects.all()
+        all_benefits = Benefit.objects.all()[-settings.EACH_BENEFITSLIST :]
         serializer = BenefitListSerializer(
             all_benefits,
             many=True,
@@ -134,6 +134,6 @@ class BenefitPhotos(APIView):
             photo = serializer.save(benefit=benefit)
             serializer = PhotoSerializer(photo)
             return Response(serializer.data)
-            
+
         else:
             return Response(serializer.errors)

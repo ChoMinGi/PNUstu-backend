@@ -24,7 +24,7 @@ class Announces(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
-        all_announces = Announce.objects.all()
+        all_announces = Announce.objects.all()[-settings.EACH_ANNOUNCESLIST :]
         serializer = AnnounceListSerializer(
             all_announces,
             many=True,

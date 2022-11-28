@@ -47,6 +47,7 @@ CUSTOM_APPS = [
     "benefits.apps.BenefitsConfig",
     "categories.apps.CategoriesConfig",
     "common.apps.CommonConfig",
+    "comments.apps.CommentsConfig",
     "inquiries.apps.InquiriesConfig",
     "medias.apps.MediasConfig",
     "petitions.apps.PetitionsConfig",
@@ -156,7 +157,6 @@ MEDIA_ROOT = "uploads"
 
 MEDIA_URL = "user-uploads/"
 
-
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
@@ -164,3 +164,8 @@ REST_FRAMEWORK = {
         "config.authentication.JWTAuthentication",
     ]
 }
+
+EACH_ANNOUNCESLIST = 3
+EACH_BENEFITSLIST = 3
+EACH_PERMISSIONMAIN = 5
+PERMISSIONLIST_PAGE_SIZE = 10
