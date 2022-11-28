@@ -19,16 +19,42 @@ from .serializers import BenefitListSerializer, BenefitDetailSerializer
 from medias.serializers import PhotoSerializer
 
 
-class Benefits(APIView):
+class BenefitsMain(APIView):
 
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
-        all_benefits = Benefit.objects.all()[-settings.EACH_BENEFITSLIST :]
+        all_benefits = Benefit.objects.all()
+        total_len = len(all_benefits)
+        pick_benefit = []
+        for n in range(min(total_len, settings.EACH_BENEFITSMAIN)):
+            pick_benefit.append(all_benefits[total_len - 1 - n])
+
         serializer = BenefitListSerializer(
-            all_benefits,
+            pick_benefit,
             many=True,
-            # KeyError get_is_owner(RoomListSerializer)의 request 키를 context로 import
+            context={"request": request},
+        )
+        return Response(serializer.data)
+
+
+class BenefitsList(APIView):
+
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get(self, request):
+        try:
+            page = request.query_params.get("page", 1)
+            page = int(page)
+        except ValueError:
+            page = 1
+        page_size = settings.BENEFITSLIST_PAGE_SIZE
+        start = (page - 1) * page_size
+        end = start + page_size
+        all_benefits = Benefit.objects.all()
+        serializer = BenefitListSerializer(
+            all_benefits[start:end],
+            many=True,
             context={"request": request},
         )
         return Response(serializer.data)
@@ -41,7 +67,7 @@ class Benefits(APIView):
                 raise ParseError("카테고리를 제휴혜택으로 설정해주세요")
             try:
                 category = Category.objects.get(pk=category_pk)
-                if category.kind != Category.CategoryKindChoices.benefitS:
+                if category.kind != Category.CategoryKindChoices.BENEFITS:
                     raise ParseError("카테고리는 '제휴혜택' 이어야합니다.")
             except Category.DoesNotExist:
                 raise ParseError("Category not found")
