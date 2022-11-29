@@ -19,6 +19,7 @@ from .serializers import (
     PetitionMainListSerializer,
     PetitionTextListSerializer,
     PetitionDetailSerializer,
+    AreYouAgreeThisPetition,
 )
 from medias.serializers import PhotoSerializer
 
@@ -166,17 +167,12 @@ class PetitionDetail(APIView):
             petition,
             data=request.data,
             partial=True,
+            context={"request": request},
         )
 
         if serializer.is_valid():
-            category_pk = request.data.get("category")
-            if category_pk:
-                try:
-                    category = Category.objects.get(pk=category_pk)
-                    if category.kind != Category.CategoryKindChoices.PETITIONS:
-                        raise ParseError("The category kind should be announces")
-                except Category.DoesNotExist:
-                    raise ParseError(detail="Petition not found")
+            petition = serializer.save()
+            return Response(serializer.data)
         else:
             return Response(serializer.errors)
 
@@ -209,3 +205,60 @@ class PetitionPhotos(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+
+
+class PetitionAgree(APIView):
+    def get_object(self, pk):
+        try:
+            return Petition.objects.get(pk=pk)
+        except Petition.DoesNotExist:
+            raise NotFound
+
+    def PetitionAgree(self, request, pk):
+        petition = self.get_object(pk)
+        if petition.writer == request.user:
+            raise PermissionDenied
+
+        serializer = PetitionDetailSerializer(
+            petition,
+            data=request.data,
+            partial=True,
+            context={"request": request},
+        )
+        if serializer.is_valid():
+            if petition.agree.filter(id=request.user.id).exists():
+                petition.agree.remove(request.user)
+                return Response(serializer.data)
+            else:
+                petition.agree.add(request.user)
+                return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+    def get(self, request, pk):
+        petition = self.get_object(pk)
+        serializer = AreYouAgreeThisPetition(
+            petition,
+            context={"request": request},
+        )
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        petition = self.get_object(pk)
+        serializer = AreYouAgreeThisPetition(
+            petition,
+            data=request.data,
+            partial=True,
+        )
+        if petition.writer == request.user:
+            raise PermissionDenied
+        else:
+            if serializer.is_valid():
+                if petition.agree.filter(pk=request.user.pk).exists():
+                    petition.agree.remove(request.user.pk)
+                    return Response(serializer.data)
+                else:
+                    petition.agree.add(request.user.pk)
+                    return Response(serializer.data)
+            else:
+                return Response(serializer.errors)

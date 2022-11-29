@@ -89,3 +89,15 @@ class PetitionDetailSerializer(serializers.ModelSerializer):
     def get_is_writer(self, petition):
         request = self.context["request"]
         return petition.writer == request.user
+
+
+class AreYouAgreeThisPetition(serializers.ModelSerializer):
+
+    total_agrees = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Petition
+        fields = "__all__"
+
+    def get_total_agrees(self, petition):
+        return petition.count_agree()
