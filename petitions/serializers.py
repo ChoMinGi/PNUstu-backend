@@ -91,7 +91,7 @@ class PetitionDetailSerializer(serializers.ModelSerializer):
         return petition.writer == request.user
 
 
-class AreYouAgreeThisPetition(serializers.ModelSerializer):
+class AgreeThisPetitionSerializer(serializers.ModelSerializer):
 
     total_agrees = serializers.SerializerMethodField()
 

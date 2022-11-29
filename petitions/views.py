@@ -19,7 +19,7 @@ from .serializers import (
     PetitionMainListSerializer,
     PetitionTextListSerializer,
     PetitionDetailSerializer,
-    AreYouAgreeThisPetition,
+    AgreeThisPetitionSerializer,
 )
 from medias.serializers import PhotoSerializer
 
@@ -139,17 +139,6 @@ class PetitionDetail(APIView):
         except Petition.DoesNotExist:
             raise NotFound
 
-    def PetitionAgree(self, request, pk):
-        petition = self.get_object(pk)
-        if petition.writer == request.user:
-            raise PermissionDenied
-        else:
-            if petition.agree.filter(id=request.user.id).exists():
-                petition.agree.remove(request.user)
-            else:
-                petition.agree.add(request.user)
-        return Response(petition.agree(pk))
-
     def get(self, request, pk):
         petition = self.get_object(pk)
         serializer = PetitionDetailSerializer(
@@ -214,30 +203,9 @@ class PetitionAgree(APIView):
         except Petition.DoesNotExist:
             raise NotFound
 
-    def PetitionAgree(self, request, pk):
-        petition = self.get_object(pk)
-        if petition.writer == request.user:
-            raise PermissionDenied
-
-        serializer = PetitionDetailSerializer(
-            petition,
-            data=request.data,
-            partial=True,
-            context={"request": request},
-        )
-        if serializer.is_valid():
-            if petition.agree.filter(id=request.user.id).exists():
-                petition.agree.remove(request.user)
-                return Response(serializer.data)
-            else:
-                petition.agree.add(request.user)
-                return Response(serializer.data)
-        else:
-            return Response(serializer.errors)
-
     def get(self, request, pk):
         petition = self.get_object(pk)
-        serializer = AreYouAgreeThisPetition(
+        serializer = AgreeThisPetitionSerializer(
             petition,
             context={"request": request},
         )
@@ -245,7 +213,7 @@ class PetitionAgree(APIView):
 
     def put(self, request, pk):
         petition = self.get_object(pk)
-        serializer = AreYouAgreeThisPetition(
+        serializer = AgreeThisPetitionSerializer(
             petition,
             data=request.data,
             partial=True,
