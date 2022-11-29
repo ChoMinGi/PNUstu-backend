@@ -20,6 +20,7 @@ from .serializers import (
     PetitionTextListSerializer,
     PetitionDetailSerializer,
     AgreeThisPetitionSerializer,
+    CommentPetitionSerializer,
 )
 from medias.serializers import PhotoSerializer
 
@@ -219,7 +220,7 @@ class PetitionAgree(APIView):
             partial=True,
         )
         if petition.writer == request.user:
-            raise PermissionDenied
+            raise PermissionDenied("자신의 글에 동의를 할 수 없습니다")
         else:
             if serializer.is_valid():
                 if petition.agree.filter(pk=request.user.pk).exists():
@@ -230,3 +231,32 @@ class PetitionAgree(APIView):
                     return Response(serializer.data)
             else:
                 return Response(serializer.errors)
+
+
+class PetitionComment(APIView):
+    def get_object(self, pk):
+        try:
+            return Petition.objects.get(pk=pk)
+        except Petition.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk):
+        petition = self.get_object(pk)
+        serializer = CommentPetitionSerializer(
+            petition,
+            context={"request": request},
+        )
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        petition = self.get_object(pk)
+        serializer = CommentPetitionSerializer(
+            petition,
+            data=request.data,
+            partial=True,
+        )
+        if serializer.is_valid():
+            petition.comment.add(request.data)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)

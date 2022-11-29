@@ -67,7 +67,6 @@ class PetitionDetailSerializer(serializers.ModelSerializer):
     writer = SimpleUserSerializer(read_only=True)
     comments = CommentSerializer(
         read_only=True,
-        many=True,
     )
     category = CategorySerializer(
         read_only=True,
@@ -101,3 +100,14 @@ class AgreeThisPetitionSerializer(serializers.ModelSerializer):
 
     def get_total_agrees(self, petition):
         return petition.count_agree()
+
+
+class CommentPetitionSerializer(serializers.ModelSerializer):
+    total_comments = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Petition
+        fields = "__all__"
+
+    def get_total_comments(self, petition):
+        return petition.count_comment()

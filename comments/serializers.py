@@ -9,7 +9,4 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = (
-            "user",
-            "payload",
-        )
+        fields = ("payload",)
