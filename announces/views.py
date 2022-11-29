@@ -119,14 +119,8 @@ class AnnounceDetail(APIView):
         )
 
         if serializer.is_valid():
-            category_pk = request.data.get("category")
-            if category_pk:
-                try:
-                    category = Category.objects.get(pk=category_pk)
-                    if category.kind != Category.CategoryKindChoices.ANNOUNCES:
-                        raise ParseError("The category kind should be announces")
-                except Category.DoesNotExist:
-                    raise ParseError(detail="Announce not found")
+            announce=serializer.save()
+            return Response(serializer.data)
         else:
             return Response(serializer.errors)
 

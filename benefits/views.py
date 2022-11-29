@@ -121,14 +121,8 @@ class BenefitDetail(APIView):
         )
 
         if serializer.is_valid():
-            category_pk = request.data.get("category")
-            if category_pk:
-                try:
-                    category = Category.objects.get(pk=category_pk)
-                    if category.kind != Category.CategoryKindChoices.BENEFITS:
-                        raise ParseError("카테고리는 '공지사항' 이어야합니다.")
-                except Category.DoesNotExist:
-                    raise ParseError(detail="Benefit not found")
+            benefit = serializer.save()
+            return Response(serializer.data)
         else:
             return Response(serializer.errors)
 
