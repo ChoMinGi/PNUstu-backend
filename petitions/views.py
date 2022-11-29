@@ -138,6 +138,17 @@ class PetitionDetail(APIView):
         except Petition.DoesNotExist:
             raise NotFound
 
+    def PetitionAgree(self, request, pk):
+        petition = self.get_object(pk)
+        if petition.writer == request.user:
+            raise PermissionDenied
+        else:
+            if petition.agree.filter(id=request.user.id).exists():
+                petition.agree.remove(request.user)
+            else:
+                petition.agree.add(request.user)
+        return Response(petition.agree(pk))
+
     def get(self, request, pk):
         petition = self.get_object(pk)
         serializer = PetitionDetailSerializer(
@@ -162,7 +173,7 @@ class PetitionDetail(APIView):
             if category_pk:
                 try:
                     category = Category.objects.get(pk=category_pk)
-                    if category.kind != Category.CategoryKindChoices.ANNOUNCES:
+                    if category.kind != Category.CategoryKindChoices.PETITIONS:
                         raise ParseError("The category kind should be announces")
                 except Category.DoesNotExist:
                     raise ParseError(detail="Petition not found")
