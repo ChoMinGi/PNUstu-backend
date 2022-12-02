@@ -12,6 +12,14 @@ class Comment(CommonModel):
         related_name="comments",
     )
 
+    petition = models.ForeignKey(
+        "petitions.Petition",
+        null = True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="comments",
+    )
+
     payload = models.TextField(
         max_length=150,
         default="",

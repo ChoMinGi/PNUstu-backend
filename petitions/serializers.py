@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Petition
+from .models import Petition,PetitionAgree
 from users.serializers import SimpleUserSerializer
 from comments.serializers import CommentSerializer
 from categories.serializers import CategorySerializer
@@ -101,14 +101,3 @@ class AgreeThisPetitionSerializer(serializers.ModelSerializer):
 
     def get_total_agrees(self, petition):
         return petition.count_agree()
-
-
-class CommentPetitionSerializer(serializers.ModelSerializer):
-    total_comments = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Petition
-        fields = "__all__"
-
-    def get_total_comments(self, petition):
-        return petition.count_comment()

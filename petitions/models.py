@@ -1,6 +1,5 @@
 from django.db import models
 from common.models import CommonModel
-from comments.models import Comment
 
 
 class Petition(CommonModel):
@@ -21,10 +20,6 @@ class Petition(CommonModel):
     agree = models.ManyToManyField(
         "petitions.PetitionAgree",
         related_name="petition_agree",
-    )
-    comment = models.ManyToManyField(
-        "petitions.PetitionComment",
-        related_name="petition_comment",
     )
     category = models.ForeignKey(
         "categories.Category",
@@ -49,7 +44,7 @@ class Petition(CommonModel):
         return petition.agree.count()
 
     def count_comment(petition):
-        return petition.comment.count()
+        return petition.comments.count()
 
 
 class PetitionAgree(CommonModel):
@@ -69,11 +64,3 @@ class PetitionAgree(CommonModel):
     def __str__(self):
         return f"{self.petition.title}"
 
-
-class PetitionComment(Comment):
-
-    petition = models.ForeignKey(
-        "petitions.Petition",
-        on_delete=models.CASCADE,
-        related_name="comments",
-    )
