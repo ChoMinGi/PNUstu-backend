@@ -5,8 +5,9 @@ from .models import Comment
 
 class CommentSerializer(serializers.ModelSerializer):
 
-    user = SimpleUserSerializer(read_only=True)
-
     class Meta:
         model = Comment
-        fields = ("payload",)
+        fields = (
+            "user",
+             "payload",
+             )

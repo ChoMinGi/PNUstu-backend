@@ -67,6 +67,7 @@ class PetitionDetailSerializer(serializers.ModelSerializer):
     writer = SimpleUserSerializer(read_only=True)
     comments = CommentSerializer(
         read_only=True,
+        many=True,
     )
     category = CategorySerializer(
         read_only=True,
