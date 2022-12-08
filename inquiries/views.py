@@ -82,6 +82,8 @@ class InquiryDetail(APIView):
             inquiry,
             context={"request": request},
         )
+        inquiry.hits+=1
+        inquiry.save()
         return Response(serializer.data)
 
     def put(self, request, pk):

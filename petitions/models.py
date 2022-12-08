@@ -28,7 +28,7 @@ class Petition(CommonModel):
         on_delete=models.SET_NULL,
         related_name="petitions",
     )
-
+    
     is_important = models.BooleanField(
         default=False,
     )
