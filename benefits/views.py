@@ -107,6 +107,8 @@ class BenefitDetail(APIView):
             benefit,
             context={"request": request},
         )
+        benefit.hits+=1
+        benefit.save()
         return Response(serializer.data)
 
     def put(self, request, pk):
