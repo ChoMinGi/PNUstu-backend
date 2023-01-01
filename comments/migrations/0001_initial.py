@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name="SetDurations",
+            name="Comment",
             fields=[
                 (
                     "id",
@@ -25,13 +25,7 @@ class Migration(migrations.Migration):
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 ("hits", models.PositiveIntegerField(default=0)),
-                (
-                    "kind",
-                    models.CharField(choices=[("survey", "설문 조사")], max_length=15),
-                ),
-                ("start_date", models.DateField(blank=True, null=True)),
-                ("end_date", models.DateField(blank=True, null=True)),
-                ("in_a_day_date", models.DateField(blank=True, null=True)),
+                ("payload", models.TextField(default="", max_length=150)),
             ],
             options={
                 "abstract": False,

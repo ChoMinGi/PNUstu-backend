@@ -9,20 +9,20 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("setdurations", "0001_initial"),
-        ("surveys", "0001_initial"),
+        ("petitions", "0001_initial"),
+        ("comments", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name="setdurations",
-            name="survey",
+            model_name="comment",
+            name="petition",
             field=models.ForeignKey(
                 blank=True,
                 null=True,
-                on_delete=django.db.models.deletion.SET_NULL,
-                related_name="set_durations",
-                to="surveys.survey",
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="comments",
+                to="petitions.petition",
             ),
         ),
     ]

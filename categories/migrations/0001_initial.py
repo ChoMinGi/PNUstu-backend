@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name="SetDurations",
+            name="Category",
             fields=[
                 (
                     "id",
@@ -25,16 +25,25 @@ class Migration(migrations.Migration):
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 ("hits", models.PositiveIntegerField(default=0)),
+                ("name", models.CharField(max_length=50)),
                 (
                     "kind",
-                    models.CharField(choices=[("survey", "설문 조사")], max_length=15),
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("announces", "공지사항"),
+                            ("benefits", "제휴혜택"),
+                            ("inquiries", "문의/건의"),
+                            ("petitions", "청원 게시판"),
+                            ("serveys", "설문조사"),
+                        ],
+                        max_length=15,
+                        null=True,
+                    ),
                 ),
-                ("start_date", models.DateField(blank=True, null=True)),
-                ("end_date", models.DateField(blank=True, null=True)),
-                ("in_a_day_date", models.DateField(blank=True, null=True)),
             ],
             options={
-                "abstract": False,
+                "verbose_name_plural": "Categories",
             },
         ),
     ]

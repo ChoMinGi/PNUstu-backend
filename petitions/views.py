@@ -226,7 +226,9 @@ class PetitionAgree(APIView):
             raise PermissionDenied("자신의 글에 동의를 할 수 없습니다")
         else:
             if serializer.is_valid():
-                if petition.agree.filter(pk=request.user.pk).exists():
+                print(petition.agree)
+                if petition.agree.filter(request.user.pk).exists():
+                    print("nonnn1111111111111")
                     petition.agree.remove(request.user.pk)
                     return Response(serializer.data)
                 else:

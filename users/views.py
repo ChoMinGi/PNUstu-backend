@@ -1,6 +1,6 @@
 import jwt
 from django.conf import settings
-from django.contrib.auth import authenticate, logout
+from django.contrib.auth import authenticate,login, logout
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -95,6 +95,7 @@ class JWTLogIn(APIView):
                 settings.SECRET_KEY,
                 algorithm="HS256",
             )
+            login(request,user)
             return Response({"token": token})
         else:
             return Response({"error": "wrong password"})

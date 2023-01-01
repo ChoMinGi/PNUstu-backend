@@ -19,6 +19,7 @@ class Petition(CommonModel):
     )
     agree = models.ManyToManyField(
         "petitions.PetitionAgree",
+        blank=True,
         related_name="petition_agree",
     )
     category = models.ForeignKey(
@@ -52,11 +53,6 @@ class PetitionAgree(CommonModel):
 
     user = models.ForeignKey(
         "users.User",
-        on_delete=models.CASCADE,
-        related_name="agrees",
-    )
-    petition = models.ForeignKey(
-        "petitions.Petition",
         on_delete=models.CASCADE,
         related_name="agrees",
     )
